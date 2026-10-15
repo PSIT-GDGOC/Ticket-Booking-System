@@ -1,209 +1,256 @@
 
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
-{% block title %}Home | Ticketly{% endblock %}
+{% block title %}Ticketly | Find Your Next Experience{% endblock %}
 
 {% block content %}
+<section class="hero">
+    <div class="hero-glow hero-glow-one"></div>
+    <div class="hero-glow hero-glow-two"></div>
 
-<section class="hero-section">
-    <div class="container">
-        <div class="row align-items-center g-5">
-            <div class="col-lg-7">
-                <span class="eyebrow">
-                    YOUR NEXT EXPERIENCE STARTS HERE
-                </span>
-
-                <h1 class="hero-title mt-3">
-                    Find your next<br>
-                    <span>unforgettable</span> event.
-                </h1>
-
-                <p class="hero-description mt-3">
-                    From live concerts to exciting workshops,
-                    discover events you'll love and book your seats with ease.
-                </p>
-
-                <div class="d-flex flex-wrap gap-3 mt-4">
-                    <a href="#events" class="btn btn-primary btn-lg rounded-pill px-4">
-                        Explore Events →
-                    </a>
-                    <a href="#how-it-works"
-                       class="btn btn-outline-secondary btn-lg rounded-pill px-4">
-                        How it works
-                    </a>
-                </div>
-
-                <div class="hero-stats mt-5">
-                    <div>
-                        <h4>Easy</h4>
-                        <p>Online booking</p>
-                    </div>
-                    <div>
-                        <h4>Secure</h4>
-                        <p>Seat selection</p>
-                    </div>
-                    <div>
-                        <h4>Instant</h4>
-                        <p>Booking updates</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-5">
-                <div class="hero-art">
-                    <div class="floating-tag">✦ Discover something new</div>
-                    <div class="ticket-illustration">
-                        <div class="ticket-top">
-                            <span class="ticket-symbol">T</span>
-                            <span class="ticket-label">YOUR NEXT EVENT</span>
-                        </div>
-                        <div class="ticket-orbit">✦</div>
-                        <h2>Make<br>memories.</h2>
-                        <div class="ticket-bottom">
-                            <span>LIVE EXPERIENCES</span>
-                            <span>✦ ✦ ✦</span>
-                        </div>
-                    </div>
-                    <div class="floating-note">
-                        <span class="note-icon">✓</span>
-                        Your next experience awaits
-                    </div>
-                </div>
-            </div>
+    <div class="hero-content">
+        <div class="eyebrow">
+            <span class="live-dot"></span>
+            YOUR NEXT GREAT EXPERIENCE STARTS HERE
         </div>
-    </div>
-</section>
 
-<section class="container py-5" id="events">
-    <div class="section-heading d-flex flex-column flex-md-row
-                justify-content-between align-items-md-end gap-3">
-        <div>
-            <span class="eyebrow">HANDPICKED FOR YOU</span>
-            <h2 class="section-title mt-2">Explore popular events</h2>
-            <p class="text-secondary mb-0">
-                Find the right event for your next outing.
-            </p>
-        </div>
+        <h1>Life is better<br>when you're <span>there.</span></h1>
+
+        <p class="hero-description">
+            From live music to unforgettable experiences,
+            discover the events worth stepping out for.
+        </p>
 
         <div class="search-box">
-            <span>⌕</span>
-            <input type="search" id="eventSearch"
-                   placeholder="Search events..." aria-label="Search events">
+            <span class="search-icon">⌕</span>
+            <input id="eventSearch" type="search"
+                   placeholder="Search concerts, festivals, comedy..."
+                   aria-label="Search events">
+            <a class="btn btn-primary search-button" href="#events">Explore events</a>
+        </div>
+
+        <div class="hero-meta">
+            <span><span class="meta-check">✓</span> Easy booking</span>
+            <span><span class="meta-check">✓</span> Experiences you'll remember</span>
         </div>
     </div>
 
-    <div class="row g-4 mt-2" id="eventGrid">
-        <div class="col-sm-6 col-lg-4 event-item">
-            <article class="event-card h-100">
-                <div class="event-cover cover-concert">
-                    <span class="event-category">MUSIC</span>
-                    <span class="cover-emoji">♫</span>
-                </div>
-                <div class="event-card-body">
-                    <p class="event-meta">LIVE EXPERIENCE</p>
-                    <h3>Live Music Night</h3>
-                    <p class="text-secondary">An evening full of music and energy.</p>
-                    <div class="event-footer">
-                        <strong>₹499 <small>onwards</small></strong>
-                        <a href="/events/" class="event-link">Explore →</a>
-                    </div>
-                </div>
-            </article>
-        </div>
-
-        <div class="col-sm-6 col-lg-4 event-item">
-            <article class="event-card h-100">
-                <div class="event-cover cover-tech">
-                    <span class="event-category">TECHNOLOGY</span>
-                    <span class="cover-emoji">⌘</span>
-                </div>
-                <div class="event-card-body">
-                    <p class="event-meta">LEARN & BUILD</p>
-                    <h3>Tech & Innovation Summit</h3>
-                    <p class="text-secondary">Ideas, technology and new connections.</p>
-                    <div class="event-footer">
-                        <strong>₹299 <small>onwards</small></strong>
-                        <a href="/events/" class="event-link">Explore →</a>
-                    </div>
-                </div>
-            </article>
-        </div>
-
-        <div class="col-sm-6 col-lg-4 event-item">
-            <article class="event-card h-100">
-                <div class="event-cover cover-art">
-                    <span class="event-category">CREATIVITY</span>
-                    <span class="cover-emoji">✿</span>
-                </div>
-                <div class="event-card-body">
-                    <p class="event-meta">CREATE SOMETHING</p>
-                    <h3>Art & Creativity Workshop</h3>
-                    <p class="text-secondary">Unwind, create and meet creative minds.</p>
-                    <div class="event-footer">
-                        <strong>₹199 <small>onwards</small></strong>
-                        <a href="/events/" class="event-link">Explore →</a>
-                    </div>
-                </div>
-            </article>
-        </div>
-    </div>
-
-    <p id="noResults" class="text-secondary text-center mt-4 d-none">
-        No matching events found.
-    </p>
-    <p class="demo-note mt-3">
-        Demo events shown for UI preview. We'll connect these cards to your Django database next.
-    </p>
-</section>
-
-<section class="how-section py-5" id="how-it-works">
-    <div class="container text-center">
-        <span class="eyebrow">SIMPLE & CONVENIENT</span>
-        <h2 class="section-title mt-2">Booking made easy</h2>
-
-        <div class="row g-4 mt-3">
-            <div class="col-md-4">
-                <div class="step-card">
-                    <div class="step-number">01</div>
-                    <h4>Discover</h4>
-                    <p>Explore events and find something you love.</p>
+    <div class="hero-art" aria-label="Live music event">
+        <div class="art-orbit orbit-one"></div>
+        <div class="art-orbit orbit-two"></div>
+        <div class="art-ticket">
+            <div class="ticket-top">
+                <span class="ticket-logo">ticketly.</span>
+                <span class="ticket-tag">LIVE EVENT</span>
+            </div>
+            <div class="ticket-visual">
+                <img src="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=900&q=85"
+                     alt="Crowd enjoying a live concert">
+                <div class="ticket-image-overlay"></div>
+                <div class="ticket-caption">
+                    <span>THE NIGHT IS YOURS</span>
+                    <strong>Feel every beat.</strong>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="step-card">
-                    <div class="step-number">02</div>
-                    <h4>Select your seats</h4>
-                    <p>Choose your preferred seats where available.</p>
+            <div class="ticket-bottom">
+                <div>
+                    <span class="ticket-label">YOUR NEXT MEMORY</span>
+                    <strong>Starts right here.</strong>
                 </div>
+                <span class="ticket-arrow">↗</span>
             </div>
-            <div class="col-md-4">
-                <div class="step-card">
-                    <div class="step-number">03</div>
-                    <h4>Book & enjoy</h4>
-                    <p>Complete your booking and get ready for the event.</p>
-                </div>
-            </div>
+        </div>
+        <div class="floating-note">
+            <span class="note-icon">✦</span>
+            <span><strong>Find your people.</strong><small>Find your next thing.</small></span>
         </div>
     </div>
 </section>
 
+<section class="category-section" id="categories">
+    <div class="section-heading category-heading">
+        <div>
+            <span class="section-kicker">EXPLORE YOUR INTERESTS</span>
+            <h2>What's your kind of <span>fun?</span></h2>
+        </div>
+        <p>One place. Endless possibilities.</p>
+    </div>
+
+    <div class="category-list">
+        <button class="category-chip selected" data-category="all" type="button">
+            <span>✦</span> All events
+        </button>
+        <button class="category-chip" data-category="music" type="button">
+            <span>♫</span> Music
+        </button>
+        <button class="category-chip" data-category="comedy" type="button">
+            <span>☻</span> Comedy
+        </button>
+        <button class="category-chip" data-category="workshop" type="button">
+            <span>✎</span> Workshops
+        </button>
+        <button class="category-chip" data-category="festival" type="button">
+            <span>✺</span> Festivals
+        </button>
+    </div>
+</section>
+
+<section class="events-section" id="events">
+    <div class="section-heading">
+        <div>
+            <span class="section-kicker">HANDPICKED FOR YOU</span>
+            <h2>Events worth <span>showing up for.</span></h2>
+        </div>
+        <a class="text-link" href="#events">Explore all events <span>→</span></a>
+    </div>
+
+    <div class="event-grid" id="eventGrid">
+        <article class="event-card" data-category="music" data-title="indie nights live concert">
+            <div class="event-image-wrap">
+                <img class="event-image"
+                     src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=800&q=85"
+                     alt="Outdoor live music concert">
+                <span class="image-label">MUSIC</span>
+                <button class="save-event" type="button" aria-label="Save Indie Nights">♡</button>
+            </div>
+            <div class="event-info">
+                <div class="event-date"><span>OCT</span><strong>24</strong></div>
+                <div class="event-details">
+                    <h3>Indie Nights Live</h3>
+                    <p class="event-location">⌖ Open Air Arena</p>
+                    <p class="event-time">Sat, 6:30 PM onwards</p>
+                </div>
+            </div>
+            <div class="event-card-bottom">
+                <div><span class="price-label">Starting from</span><strong>₹499</strong></div>
+                <a class="btn btn-outline" href="#book-indie">Book now <span>↗</span></a>
+            </div>
+        </article>
+
+        <article class="event-card" data-category="comedy" data-title="the comedy club standup comedy">
+            <div class="event-image-wrap">
+                <img class="event-image"
+                     src="https://images.unsplash.com/photo-1585699324551-f6c309eedeca?auto=format&fit=crop&w=800&q=85"
+                     alt="Stage ready for a comedy show">
+                <span class="image-label">COMEDY</span>
+                <button class="save-event" type="button" aria-label="Save The Comedy Club">♡</button>
+            </div>
+            <div class="event-info">
+                <div class="event-date"><span>OCT</span><strong>26</strong></div>
+                <div class="event-details">
+                    <h3>The Comedy Club</h3>
+                    <p class="event-location">⌖ Laugh House Studio</p>
+                    <p class="event-time">Mon, 7:00 PM onwards</p>
+                </div>
+            </div>
+            <div class="event-card-bottom">
+                <div><span class="price-label">Starting from</span><strong>₹299</strong></div>
+                <a class="btn btn-outline" href="#book-comedy">Book now <span>↗</span></a>
+            </div>
+        </article>
+
+        <article class="event-card" data-category="workshop" data-title="creative minds design workshop">
+            <div class="event-image-wrap">
+                <img class="event-image"
+                     src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=85"
+                     alt="Creative workshop and collaboration">
+                <span class="image-label">WORKSHOP</span>
+                <button class="save-event" type="button" aria-label="Save Creative Minds">♡</button>
+            </div>
+            <div class="event-info">
+                <div class="event-date"><span>OCT</span><strong>29</strong></div>
+                <div class="event-details">
+                    <h3>Creative Minds</h3>
+                    <p class="event-location">⌖ The Design Room</p>
+                    <p class="event-time">Thu, 11:00 AM onwards</p>
+                </div>
+            </div>
+            <div class="event-card-bottom">
+                <div><span class="price-label">Starting from</span><strong>₹399</strong></div>
+                <a class="btn btn-outline" href="#book-creative">Book now <span>↗</span></a>
+            </div>
+        </article>
+
+        <article class="event-card" data-category="festival" data-title="city lights festival">
+            <div class="event-image-wrap">
+                <img class="event-image"
+                     src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=85"
+                     alt="Colourful lights at an outdoor festival">
+                <span class="image-label">FESTIVAL</span>
+                <button class="save-event" type="button" aria-label="Save City Lights">♡</button>
+            </div>
+            <div class="event-info">
+                <div class="event-date"><span>NOV</span><strong>02</strong></div>
+                <div class="event-details">
+                    <h3>City Lights Festival</h3>
+                    <p class="event-location">⌖ Riverside Grounds</p>
+                    <p class="event-time">Sun, 5:00 PM onwards</p>
+                </div>
+            </div>
+            <div class="event-card-bottom">
+                <div><span class="price-label">Starting from</span><strong>₹699</strong></div>
+                <a class="btn btn-outline" href="#book-city">Book now <span>↗</span></a>
+            </div>
+        </article>
+    </div>
+
+    <p class="no-results" id="noResults" hidden>No matching events found. Try another search.</p>
+    <p class="demo-note">Preview events are sample content. Booking links are visual placeholders for now.</p>
+</section>
+
+<section class="bottom-banner">
+    <div>
+        <span class="section-kicker">YOUR NEXT STORY IS WAITING</span>
+        <h2>Don't just hear about it.<br><span>Be there.</span></h2>
+    </div>
+    <a class="btn btn-light" href="#events">Discover events <span>↗</span></a>
+    <div class="banner-decoration">✳</div>
+</section>
+{% endblock %}
+
+{% block scripts %}
 <script>
     const searchInput = document.getElementById("eventSearch");
-    const eventItems = document.querySelectorAll(".event-item");
+    const categoryButtons = document.querySelectorAll(".category-chip");
+    const eventCards = document.querySelectorAll(".event-card");
     const noResults = document.getElementById("noResults");
+    let selectedCategory = "all";
 
-    searchInput.addEventListener("input", function () {
-        const query = this.value.toLowerCase().trim();
+    function filterEvents() {
+        const query = searchInput.value.trim().toLowerCase();
         let visibleCount = 0;
 
-        eventItems.forEach(function (item) {
-            const matches = item.textContent.toLowerCase().includes(query);
-            item.classList.toggle("d-none", !matches);
-            if (matches) visibleCount++;
+        eventCards.forEach(card => {
+            const matchesText = card.dataset.title.includes(query);
+            const matchesCategory =
+                selectedCategory === "all" ||
+                card.dataset.category === selectedCategory;
+
+            const visible = matchesText && matchesCategory;
+            card.hidden = !visible;
+            if (visible) visibleCount++;
         });
 
-        noResults.classList.toggle("d-none", visibleCount > 0);
+        noResults.hidden = visibleCount !== 0;
+    }
+
+    searchInput.addEventListener("input", filterEvents);
+
+    categoryButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            selectedCategory = button.dataset.category;
+            categoryButtons.forEach(item => item.classList.remove("selected"));
+            button.classList.add("selected");
+            filterEvents();
+        });
+    });
+
+    document.querySelectorAll(".save-event").forEach(button => {
+        button.addEventListener("click", () => {
+            const saved = button.classList.toggle("saved");
+            button.textContent = saved ? "♥" : "♡";
+            button.setAttribute("aria-pressed", String(saved));
+        });
     });
 </script>
-
 {% endblock %}
