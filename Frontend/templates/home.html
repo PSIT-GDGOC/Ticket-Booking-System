@@ -1,0 +1,349 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Ticketly | Find Your Next Experience{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-glow hero-glow-one"></div>
+    <div class="hero-glow hero-glow-two"></div>
+
+    <div class="hero-content">
+        <div class="eyebrow">
+            <span class="live-dot"></span>
+            YOUR NEXT GREAT EXPERIENCE STARTS HERE
+        </div>
+
+        <h1>Life is better<br>when you're <span>there.</span></h1>
+
+        <p class="hero-description">
+            From live music to unforgettable experiences,
+            discover the events worth stepping out for.
+        </p>
+
+        <div class="search-box">
+            <span class="search-icon">⌕</span>
+            <input
+                id="eventSearch"
+                type="search"
+                placeholder="Search concerts, festivals, comedy..."
+                aria-label="Search events"
+            >
+            <a class="btn btn-primary search-button" href="#events">
+                Explore events
+            </a>
+        </div>
+
+        <div class="hero-meta">
+            <span><span class="meta-check">✓</span> Easy booking</span>
+            <span><span class="meta-check">✓</span> Experiences you'll remember</span>
+        </div>
+    </div>
+
+    <div class="hero-art" aria-label="Live music event">
+        <div class="art-orbit orbit-one"></div>
+        <div class="art-orbit orbit-two"></div>
+
+        <div class="art-ticket">
+            <div class="ticket-top">
+                <span class="ticket-logo">ticketly.</span>
+                <span class="ticket-tag">LIVE EVENT</span>
+            </div>
+
+            <div class="ticket-visual">
+                <img
+                    src="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=900&q=85"
+                    alt="Crowd enjoying a live concert"
+                >
+                <div class="ticket-image-overlay"></div>
+                <div class="ticket-caption">
+                    <span>THE NIGHT IS YOURS</span>
+                    <strong>Feel every beat.</strong>
+                </div>
+            </div>
+
+            <div class="ticket-bottom">
+                <div>
+                    <span class="ticket-label">YOUR NEXT MEMORY</span>
+                    <strong>Starts right here.</strong>
+                </div>
+                <span class="ticket-arrow">↗</span>
+            </div>
+        </div>
+
+        <div class="floating-note">
+            <span class="note-icon">✦</span>
+            <span>
+                <strong>Find your people.</strong>
+                <small>Find your next thing.</small>
+            </span>
+        </div>
+    </div>
+</section>
+
+<section class="category-section" id="categories">
+    <div class="section-heading category-heading">
+        <div>
+            <span class="section-kicker">EXPLORE YOUR INTERESTS</span>
+            <h2>What's your kind of <span>fun?</span></h2>
+        </div>
+        <p>One place. Endless possibilities.</p>
+    </div>
+
+    <div class="category-list">
+        <button class="category-chip selected" data-category="all" type="button">
+            <span>✦</span> All events
+        </button>
+        <button class="category-chip" data-category="music" type="button">
+            <span>♫</span> Music
+        </button>
+        <button class="category-chip" data-category="comedy" type="button">
+            <span>☻</span> Comedy
+        </button>
+        <button class="category-chip" data-category="workshop" type="button">
+            <span>✎</span> Workshops
+        </button>
+        <button class="category-chip" data-category="festival" type="button">
+            <span>✺</span> Festivals
+        </button>
+    </div>
+</section>
+
+<section class="events-section" id="events">
+    <div class="section-heading">
+        <div>
+            <span class="section-kicker">HANDPICKED FOR YOU</span>
+            <h2>Events worth <span>showing up for.</span></h2>
+        </div>
+        <a class="text-link" href="#events">
+            Explore all events <span>→</span>
+        </a>
+    </div>
+
+    <div class="event-grid" id="eventGrid">
+
+        {% for event in events %}
+        <article
+            class="event-card"
+            data-title="{{ event.title|lower }} {{ event.description|lower }} {{ event.venue|lower }}"
+            data-category="all"
+        >
+            <div class="event-image-wrap">
+                <img
+                    class="event-image"
+                    src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=85"
+                    alt="Event: {{ event.title }}"
+                    loading="lazy"
+                >
+
+                <span class="image-label">EVENT</span>
+
+                <button
+                    class="save-event"
+                    type="button"
+                    aria-label="Save {{ event.title }}"
+                    aria-pressed="false"
+                >♡</button>
+            </div>
+
+            <div class="event-info">
+                <div class="event-date">
+                    <span>{{ event.date_time|date:"M" }}</span>
+                    <strong>{{ event.date_time|date:"d" }}</strong>
+                </div>
+
+                <div class="event-details">
+                    <h3>{{ event.title }}</h3>
+                    <p class="event-location">⌖ {{ event.venue }}</p>
+                    <p class="event-time">
+                        {{ event.date_time|date:"D, h:i A" }}
+                    </p>
+                </div>
+            </div>
+
+            <div class="event-card-bottom">
+                <div>
+                    <span class="price-label">Ticket price</span>
+                    <strong>₹{{ event.price|floatformat:2 }}</strong>
+                </div>
+
+                <a
+                    class="btn btn-outline"
+                    href="{% url 'event_detail' event.id %}"
+                >
+                    View details <span>↗</span>
+                </a>
+            </div>
+        </article>
+
+        {% empty %}
+        <div class="empty-events">
+            <h3>No events available right now</h3>
+            <p>Please check back later for upcoming events.</p>
+        </div>
+        {% endfor %}
+
+    </div>
+
+    <p class="no-results" id="noResults" hidden>
+        No matching events found. Try another search.
+    </p>
+</section>
+
+<section class="bottom-banner">
+    <div>
+        <span class="section-kicker">YOUR NEXT STORY IS WAITING</span>
+        <h2>Don't just hear about it.<br><span>Be there.</span></h2>
+    </div>
+
+    <a class="btn btn-light" href="#events">
+        Discover events <span>↗</span>
+    </a>
+
+    <div class="banner-decoration">✳</div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const searchInput = document.getElementById("eventSearch");
+    const categoryButtons = document.querySelectorAll(".category-chip");
+    const eventCards = document.querySelectorAll(".event-card");
+    const noResults = document.getElementById("noResults");
+
+    let selectedCategory = "all";
+
+    // These are display categories inferred from event text.
+    // The database model currently has no category field.
+    function detectCategory(card) {
+        const text = card.dataset.title.toLowerCase();
+
+        if (
+            text.includes("comedy") ||
+            text.includes("standup") ||
+            text.includes("stand-up")
+        ) {
+            return "comedy";
+        }
+
+        if (
+            text.includes("workshop") ||
+            text.includes("training") ||
+            text.includes("bootcamp") ||
+            text.includes("seminar")
+        ) {
+            return "workshop";
+        }
+
+        if (
+            text.includes("festival") ||
+            text.includes("fest") ||
+            text.includes("fair")
+        ) {
+            return "festival";
+        }
+
+        if (
+            text.includes("music") ||
+            text.includes("concert") ||
+            text.includes("live band") ||
+            text.includes("dj night")
+        ) {
+            return "music";
+        }
+
+        return "all";
+    }
+
+    const categoryImages = {
+        music: {
+            label: "MUSIC",
+            image: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=800&q=85"
+        },
+        comedy: {
+            label: "COMEDY",
+            image: "https://images.unsplash.com/photo-1585699324551-f6c309eedeca?auto=format&fit=crop&w=800&q=85"
+        },
+        workshop: {
+            label: "WORKSHOP",
+            image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=85"
+        },
+        festival: {
+            label: "FESTIVAL",
+            image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=85"
+        },
+        all: {
+            label: "EVENT",
+            image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=85"
+        }
+    };
+
+    // Prepare each real database event card.
+    eventCards.forEach(card => {
+        const category = detectCategory(card);
+        const displayCategory = categoryImages[category];
+
+        card.dataset.category = category;
+
+        const image = card.querySelector(".event-image");
+        const label = card.querySelector(".image-label");
+
+        if (image) {
+            image.src = displayCategory.image;
+        }
+
+        if (label) {
+            label.textContent = displayCategory.label;
+        }
+    });
+
+    function filterEvents() {
+        const query = searchInput.value.trim().toLowerCase();
+        let visibleCount = 0;
+
+        eventCards.forEach(card => {
+            const searchableText = card.dataset.title || "";
+
+            const matchesText = searchableText.includes(query);
+
+            const matchesCategory =
+                selectedCategory === "all" ||
+                card.dataset.category === selectedCategory;
+
+            const visible = matchesText && matchesCategory;
+
+            card.hidden = !visible;
+
+            if (visible) {
+                visibleCount++;
+            }
+        });
+
+        noResults.hidden = visibleCount !== 0 || eventCards.length === 0;
+    }
+
+    searchInput.addEventListener("input", filterEvents);
+
+    categoryButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            selectedCategory = button.dataset.category;
+
+            categoryButtons.forEach(item => {
+                item.classList.remove("selected");
+            });
+
+            button.classList.add("selected");
+            filterEvents();
+        });
+    });
+
+    document.querySelectorAll(".save-event").forEach(button => {
+        button.addEventListener("click", () => {
+            const saved = button.classList.toggle("saved");
+
+            button.textContent = saved ? "♥" : "♡";
+            button.setAttribute("aria-pressed", String(saved));
+        });
+    });
+</script>
+{% endblock %}

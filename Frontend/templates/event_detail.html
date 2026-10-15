@@ -1,0 +1,61 @@
+
+{% extends "base.html" %}
+
+{% block title %}{{ event.title }} | Ticketly{% endblock %}
+
+{% block content %}
+<section class="event-detail-page">
+    <a href="/" class="back-link">← Back to Explore</a>
+
+    <div class="event-detail-card">
+        <div class="event-detail-label">EVENT DETAILS</div>
+
+        <h1>{{ event.title }}</h1>
+
+        <p class="event-detail-description">
+            {{ event.description }}
+        </p>
+
+        <div class="event-info-grid">
+            <div class="event-info-item">
+                <span class="event-info-icon">📅</span>
+                <div>
+                    <span class="event-info-label">Date</span>
+                    <p>{{ event.date_time|date:"l, d F Y" }}</p>
+                </div>
+            </div>
+
+            <div class="event-info-item">
+                <span class="event-info-icon">🕒</span>
+                <div>
+                    <span class="event-info-label">Time</span>
+                    <p>{{ event.date_time|date:"h:i A" }}</p>
+                </div>
+            </div>
+
+            <div class="event-info-item">
+                <span class="event-info-icon">📍</span>
+                <div>
+                    <span class="event-info-label">Venue</span>
+                    <p>{{ event.venue }}</p>
+                </div>
+            </div>
+
+            <div class="event-info-item">
+                <span class="event-info-icon">🎟️</span>
+                <div>
+                    <span class="event-info-label">Ticket Price</span>
+                    <p>₹{{ event.price }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="event-detail-actions">
+            <button class="btn btn-primary" disabled>
+                Booking coming soon
+            </button>
+            <p>Ticket booking will be connected in the next step.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}
