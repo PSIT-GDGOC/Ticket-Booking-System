@@ -11,7 +11,8 @@ A Python/Django web application where users can browse events, select seats, boo
 - Booking history for each user
 - Double-booking prevention using database transactions
 - Admin panel to manage events, seats, and bookings
-- Email confirmation and payment integration (planned)
+- Email confirmation after a successful booking
+- Payment integration (planned)
 
 ## Tech Stack
 
@@ -27,18 +28,20 @@ A Python/Django web application where users can browse events, select seats, boo
 
 ```
 ticket-booking-system/
-├── manage.py
-├── requirements.txt
-├── .env.example
+├── Backend/
+│   ├── manage.py
+│   ├── requirements.txt
+│   ├── .env.example
+│   ├── config/      # Project settings and main URLs
+│   ├── users/       # Registration, login, profile
+│   ├── events/      # Events and seats
+│   └── bookings/    # Booking, cancellation and confirmation emails
+├── Frontend/
+│   ├── templates/   # HTML templates
+│   └── static/      # CSS, JS, images
 ├── .gitignore
 ├── LICENSE
-├── README.md
-├── config/          # Project settings and main URLs
-├── users/           # Registration, login, profile
-├── events/          # Events and seats
-├── bookings/        # Booking and cancellation logic
-├── templates/       # HTML templates
-└── static/          # CSS, JS, images
+└── README.md
 ```
 
 ## Getting Started
@@ -61,8 +64,9 @@ python -m venv venv
 venv\Scripts\activate          # Windows
 # source venv/bin/activate     # macOS / Linux
 
-# 3. Install dependencies
-pip install -r requirements.txt
+# 3. Install dependencies and move into the Django project
+pip install -r Backend/requirements.txt
+cd Backend
 
 # 4. Set up environment variables
 cp .env.example .env           # Windows: copy .env.example .env
@@ -84,7 +88,7 @@ Admin panel: http://127.0.0.1:8000/admin/
 
 ## Environment Variables
 
-Create a `.env` file in the project root:
+Create a `.env` file in the `Backend/` folder (next to `manage.py`):
 
 ```
 SECRET_KEY=your_django_secret_key
@@ -92,7 +96,17 @@ DEBUG=True
 DB_NAME=ticket_booking
 DB_USER=your_user
 DB_PASSWORD=your_password
+
+# Email (leave EMAIL_HOST empty to print emails to the console in development)
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_HOST_USER=your_email@example.com
+EMAIL_HOST_PASSWORD=your_app_password
+EMAIL_USE_TLS=True
+DEFAULT_FROM_EMAIL=Ticketly <your_email@example.com>
 ```
+
+See `.env.example` for the full list.
 
 Never commit your `.env` file.
 
