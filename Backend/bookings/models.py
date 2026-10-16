@@ -46,13 +46,21 @@ class BookingSeat(models.Model):
         on_delete=models.PROTECT,
         related_name="booking_records"
     )
+    # Set to False when the booking is cancelled, so the seat is free again.
+    is_active = models.BooleanField(default=True)
 
     class Meta:
         constraints = [
             models.UniqueConstraint(
                 fields=["booking", "seat"],
                 name="unique_seat_per_booking"
-            )
+            ),
+            # A seat can only have one active booking at a time.
+            models.UniqueConstraint(
+                fields=["seat"],
+                condition=models.Q(is_active=True),
+                name="unique_active_booking_per_seat"
+            ),
         ]
 
     def __str__(self):
