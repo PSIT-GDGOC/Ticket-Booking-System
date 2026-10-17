@@ -1,0 +1,15 @@
+Hi {{ user.get_full_name|default:user.username }},
+
+Your booking is confirmed.
+
+Booking reference: {{ booking_reference }}
+Event: {{ event.title }}
+Date: {{ event_date }}
+Time: {{ event_time }}
+Venue: {{ event.venue }}
+{% if seats %}Seats: {{ seats|join:", " }}
+{% endif %}Total amount: ₹{{ booking.total_amount }}
+
+Please keep this email and quote your booking reference at the venue.
+
+Thank you for booking with Ticketly.
