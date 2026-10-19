@@ -5,7 +5,12 @@ from django.views.decorators.http import require_POST
 
 from events.models import Event
 
-from .services import SeatUnavailableError, book_seats
+from .models import Booking
+from .services import (
+    SeatUnavailableError,
+    book_seats,
+    cancel_booking as cancel_booking_service,
+)
 
 
 @login_required
@@ -21,3 +26,16 @@ def book_event_seats(request, event_id):
     else:
         messages.success(request, "Booking confirmed!")
     return redirect("event_detail", event_id=event.pk)
+
+
+@login_required
+@require_POST
+def cancel_booking(request, booking_id):
+    booking = get_object_or_404(
+        Booking,
+        pk=booking_id,
+        user=request.user,
+    )
+    cancel_booking_service(booking)
+    messages.success(request, "Booking cancelled.")
+    return redirect("event_detail", event_id=booking.event_id)

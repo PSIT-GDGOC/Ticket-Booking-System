@@ -87,6 +87,63 @@ class DoubleBookingTests(BookingTestBase):
         self.assertTrue(any("no longer available" in m for m in msgs))
         self.assertEqual(Booking.objects.filter(user=self.bob).count(), 0)
 
+    def test_owner_can_cancel_booking_from_view(self):
+        booking = book_seats(self.alice, self.event, [self.seat_a.pk])
+        client = Client()
+        client.force_login(self.alice)
+
+        response = client.post(
+            reverse("cancel_booking", args=[booking.pk]),
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("event_detail", args=[self.event.pk]),
+        )
+        booking.refresh_from_db()
+        self.assertEqual(booking.status, "CANCELLED")
+        self.assertFalse(booking.booking_seats.get(seat=self.seat_a).is_active)
+
+    def test_user_cannot_cancel_someone_elses_booking(self):
+        booking = book_seats(self.alice, self.event, [self.seat_a.pk])
+        client = Client()
+        client.force_login(self.bob)
+
+        response = client.post(
+            reverse("cancel_booking", args=[booking.pk]),
+        )
+
+        self.assertEqual(response.status_code, 404)
+        booking.refresh_from_db()
+        self.assertEqual(booking.status, "CONFIRMED")
+        self.assertTrue(booking.booking_seats.get(seat=self.seat_a).is_active)
+
+    def test_cancellation_requires_login(self):
+        booking = book_seats(self.alice, self.event, [self.seat_a.pk])
+
+        response = Client().post(
+            reverse("cancel_booking", args=[booking.pk]),
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            response["Location"],
+            f"/accounts/login/?next={reverse('cancel_booking', args=[booking.pk])}",
+        )
+
+    def test_cancellation_requires_post(self):
+        booking = book_seats(self.alice, self.event, [self.seat_a.pk])
+        client = Client()
+        client.force_login(self.alice)
+
+        response = client.get(
+            reverse("cancel_booking", args=[booking.pk]),
+        )
+
+        self.assertEqual(response.status_code, 405)
+        booking.refresh_from_db()
+        self.assertEqual(booking.status, "CONFIRMED")
+
 
 class ConcurrentBookingTests(BookingTestBase):
     def test_simultaneous_requests_book_a_seat_only_once(self):
