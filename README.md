@@ -11,7 +11,8 @@ A Python/Django web application where users can browse events, select seats, boo
 - Booking history for each user
 - Double-booking prevention using database transactions
 - Admin panel to manage events, seats, and bookings
-- Email confirmation and payment integration (planned)
+- Email confirmation after a successful booking
+- Payment integration (planned)
 
 ## Tech Stack
 
@@ -26,19 +27,21 @@ A Python/Django web application where users can browse events, select seats, boo
 ## Project Structure
 
 ```
-ticket-booking-system/
-├── manage.py
-├── requirements.txt
-├── .env.example
+Ticket-Booking-System/
+├── Backend/
+│   ├── manage.py
+│   ├── requirements.txt
+│   ├── .env.example
+│   ├── config/      # Project settings and main URLs
+│   ├── users/       # Registration, login, profile
+│   ├── events/      # Events and seats
+│   └── bookings/    # Booking, cancellation and confirmation emails
+├── Frontend/
+│   ├── templates/   # HTML templates
+│   └── static/      # CSS, JS, images
 ├── .gitignore
 ├── LICENSE
-├── README.md
-├── config/          # Project settings and main URLs
-├── users/           # Registration, login, profile
-├── events/          # Events and seats
-├── bookings/        # Booking and cancellation logic
-├── templates/       # HTML templates
-└── static/          # CSS, JS, images
+└── README.md
 ```
 
 ## Getting Started
@@ -53,8 +56,8 @@ ticket-booking-system/
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/<your-username>/ticket-booking-system.git
-cd ticket-booking-system
+git clone https://github.com/ShreyanshFS/Ticket-Booking-System.git
+cd Ticket-Booking-System
 
 # 2. Create and activate a virtual environment
 python -m venv venv
@@ -62,37 +65,54 @@ venv\Scripts\activate          # Windows
 # source venv/bin/activate     # macOS / Linux
 
 # 3. Install dependencies
-pip install -r requirements.txt
+pip install -r Backend/requirements.txt
 
-# 4. Set up environment variables
-cp .env.example .env           # Windows: copy .env.example .env
+# 4. Move into the Django project (run all manage.py commands from here)
+cd Backend
+
+# 5. Set up environment variables
+copy .env.example .env         # Windows
+# cp .env.example .env         # macOS / Linux
 # then edit .env with your own values
 
-# 5. Apply database migrations
-python manage.py makemigrations
+# 6. Apply database migrations
 python manage.py migrate
 
-# 6. Create an admin user
+# 7. Create an admin user
 python manage.py createsuperuser
 
-# 7. Run the development server
+# 8. Run the development server
 python manage.py runserver
 ```
 
 Open http://127.0.0.1:8000/ in your browser.
 Admin panel: http://127.0.0.1:8000/admin/
 
+### Verify the setup (optional)
+
+Run these from the `Backend/` folder:
+
+```bash
+python manage.py check
+python manage.py test
+```
+
 ## Environment Variables
 
-Create a `.env` file in the project root:
+Copy `Backend/.env.example` to `Backend/.env` (next to `manage.py`) and fill in your values. Only email is configured through `.env`:
 
 ```
-SECRET_KEY=your_django_secret_key
-DEBUG=True
-DB_NAME=ticket_booking
-DB_USER=your_user
-DB_PASSWORD=your_password
+EMAIL_HOST=
+EMAIL_PORT=587
+EMAIL_HOST_USER=
+EMAIL_HOST_PASSWORD=
+EMAIL_USE_TLS=True
+EMAIL_USE_SSL=False
+EMAIL_TIMEOUT=10
+DEFAULT_FROM_EMAIL=Ticketly <no-reply@example.com>
 ```
+
+Leave `EMAIL_HOST` empty in development: booking confirmation emails are then printed to the console instead of being sent.
 
 Never commit your `.env` file.
 
