@@ -1,14 +1,19 @@
 # Ticketly - Ticket Booking System
 
-Ticketly is a Django application for discovering events and viewing event details. The project also contains the booking data model and booking-confirmation email flow that will support the next stage of the product.
+Ticketly is a Django application for discovering events and viewing event details. The backend also contains the data model and email helpers needed for a future booking flow.
 
 ## Current status
 
+Implemented:
+
 - The home page lists active events and supports search and category-style filtering in the browser.
 - Event detail pages show the event description, date, time, venue, and price.
-- Booking models and confirmation-email logic are present in the backend.
-- The booking button is not connected to a booking form yet; it currently displays `Booking coming soon`.
-- Payment integration is not implemented.
+- The Django admin site is available at `/admin/` and includes event, seat, booking, and booking-seat management.
+
+Not yet implemented:
+
+- The public booking flow is not available. The event detail page currently displays `Booking coming soon`.
+- Payment integration is not available.
 
 ## Tech stack
 
@@ -66,6 +71,8 @@ Ticket-Booking-System/
 
 ## Setup
 
+The commands below start from the repository root. After the database step, run Django management commands from `Backend/`.
+
 ### Prerequisites
 
 - Python 3.12 or newer
@@ -97,8 +104,6 @@ source .venv/bin/activate
 
 ### 3. Install backend dependencies
 
-Run this from the repository root:
-
 ```bash
 python -m pip install --upgrade pip
 python -m pip install -r Backend/requirements.txt
@@ -122,7 +127,7 @@ Edit `Backend/.env` before enabling email delivery. The project loads this file 
 
 ### 5. Create the database
 
-Change into the directory containing `manage.py`, then apply the existing migrations:
+From the repository root, change into the directory containing `manage.py`, then apply the existing migrations:
 
 ```bash
 cd Backend
@@ -161,14 +166,15 @@ python manage.py test
 
 The email tests use Django's in-memory test mailbox; they do not send messages to real recipients.
 
-## Current routes
+## Routes
 
 | Route | Description |
 | --- | --- |
 | `/` | Active event listing |
 | `/events/<event_id>/` | Event details |
+| `/admin/` | Django admin site, including booking and event management |
 
-The booking UI and Django admin route are not currently connected in `Backend/config/urls.py`.
+The `/admin/` route is connected in `Backend/config/urls.py`. Booking models are available through the admin, but there is not yet a public booking route.
 
 ## Contributing
 
