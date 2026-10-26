@@ -10,11 +10,17 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 PROJECT_ROOT = BASE_DIR.parent
+
+# Load variables from a local .env file (ignored by git) if present.
+load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -130,11 +136,40 @@ STATICFILES_DIRS = [
 
 
 # Email
-# https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
+# Django 6.1+ configures email through the MAILERS setting. The older
+# EMAIL_BACKEND / EMAIL_HOST / EMAIL_PORT settings are deprecated in 6.1 and must
+# not be defined alongside MAILERS, so this project uses MAILERS only.
+#
+# Credentials come from environment variables (see .env.example); nothing
+# secret is stored in source control. With no EMAIL_HOST set, emails are
+# printed to the console, which is convenient for local development.
 
-MAILERS = {
-    'default': {
-        'BACKEND': 'django.core.mail.backends.console.EmailBackend',
-    },
-}
+def _env_bool(name, default=False):
+    return os.environ.get(name, str(default)).strip().lower() in ('1', 'true', 'yes', 'on')
 
+
+_email_host = os.environ.get('EMAIL_HOST', '')
+
+if _email_host:
+    _email_use_ssl = _env_bool('EMAIL_USE_SSL', False)
+    _default_mailer = {
+        'BACKEND': 'django.core.mail.backends.smtp.EmailBackend',
+        'OPTIONS': {
+            'host': _email_host,
+            'port': int(os.environ.get('EMAIL_PORT', '465' if _email_use_ssl else '587')),
+            'username': os.environ.get('EMAIL_HOST_USER', ''),
+            'password': os.environ.get('EMAIL_HOST_PASSWORD', ''),
+            'use_tls': _env_bool('EMAIL_USE_TLS', not _email_use_ssl),
+            'use_ssl': _email_use_ssl,
+            'timeout': int(os.environ.get('EMAIL_TIMEOUT', '10')),
+        },
+    }
+else:
+    _default_mailer = {'BACKEND': 'django.core.mail.backends.console.EmailBackend'}
+
+# Defined exactly once.
+MAILERS = {'default': _default_mailer}
+
+DEFAULT_FROM_EMAIL = os.environ.get(
+    'DEFAULT_FROM_EMAIL', 'Ticketly <no-reply@ticketly.local>'
+)
