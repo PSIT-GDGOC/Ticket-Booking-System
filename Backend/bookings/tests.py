@@ -1,4 +1,6 @@
+import random
 import threading
+import time
 from datetime import timedelta
 
 from django.contrib.auth.models import User
@@ -154,14 +156,21 @@ class ConcurrentBookingTests(BookingTestBase):
         def attempt(user):
             try:
                 barrier.wait()
-                book_seats(user, self.event, [self.seat_a.pk])
-                outcomes.append("booked")
-            except SeatUnavailableError:
-                outcomes.append("rejected")
-            except OperationalError:
-                # SQLite sometimes says "table is locked" when threads write
-                # together. That request didn't book anything, so it's fine.
-                outcomes.append("locked")
+                # SQLite (in-memory, shared cache) fails at once with "table is
+                # locked" instead of waiting, and on some machines every thread
+                # can hit that on the first try. A real request would simply
+                # retry, so do the same here with a short random pause.
+                for _ in range(100):
+                    try:
+                        book_seats(user, self.event, [self.seat_a.pk])
+                        outcomes.append("booked")
+                        return
+                    except SeatUnavailableError:
+                        outcomes.append("rejected")
+                        return
+                    except OperationalError:
+                        time.sleep(random.uniform(0.005, 0.05))
+                outcomes.append("gave up (database stayed locked)")
             except Exception as exc:
                 outcomes.append(f"error: {exc!r}")
             finally:
@@ -174,11 +183,7 @@ class ConcurrentBookingTests(BookingTestBase):
             t.join()
 
         self.assertEqual(outcomes.count("booked"), 1, outcomes)
-        self.assertEqual(
-            outcomes.count("rejected") + outcomes.count("locked"),
-            len(users) - 1,
-            outcomes,
-        )
+        self.assertEqual(outcomes.count("rejected"), len(users) - 1, outcomes)
         self.assertEqual(
             BookingSeat.objects.filter(seat=self.seat_a, is_active=True).count(), 1
         )
