@@ -106,3 +106,14 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Flash messages (booking success / seat unavailable) */
+.alert {
+    max-width: 960px;
+    margin: 16px auto 0;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+}
+.alert-success { background: #e6f6ec; color: #17603a; }
+.alert-danger  { background: #fdecec; color: #8a1f1f; }

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
+
 from . import views
 
 urlpatterns = [
@@ -8,6 +9,7 @@ urlpatterns = [
     path(
         "events/<int:event_id>/",
         views.event_detail,
-        name="event_detail"
+        name="event_detail",
     ),
+    path("", include("bookings.urls")),
 ]

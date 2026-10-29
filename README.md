@@ -1,19 +1,14 @@
-# Ticketly - Ticket Booking System
+# Ticketly — Ticket Booking System
 
-Ticketly is a Django application for discovering events and viewing event details. The backend also contains the data model and email helpers needed for a future booking flow.
+Ticketly is a Django application for discovering events, reserving seats, and managing bookings.
 
-## Current status
+## Features
 
-Implemented:
-
-- The home page lists active events and supports search and category-style filtering in the browser.
-- Event detail pages show the event description, date, time, venue, and price.
-- The Django admin site is available at `/admin/` and includes event, seat, booking, and booking-seat management.
-
-Not yet implemented:
-
-- The public booking flow is not available. The event detail page currently displays `Booking coming soon`.
-- Payment integration is not available.
+- Browse active events and view their details.
+- Reserve one or more seats with database-backed double-booking prevention.
+- Cancel a booking to release its seats.
+- Receive booking-confirmation emails after a successful transaction.
+- Manage events, seats, bookings, and booking seats in Django admin at `/admin/`.
 
 ## Tech stack
 
@@ -31,58 +26,27 @@ Ticket-Booking-System/
 │   ├── manage.py                 # Django command-line entry point
 │   ├── requirements.txt          # Backend dependencies
 │   ├── .env.example              # Safe environment-variable template
-│   ├── config/
-│   │   ├── settings.py           # Django settings and email configuration
-│   │   ├── urls.py               # Project URL routes
-│   │   ├── asgi.py               # ASGI entry point
-│   │   └── wsgi.py               # WSGI entry point
-│   ├── events/
-│   │   ├── migrations/           # Event and seat migrations
-│   │   ├── models.py             # Event and Seat models
-│   │   ├── views.py              # Event page views
-│   │   └── admin.py              # Event admin configuration
-│   ├── bookings/
-│   │   ├── migrations/           # Booking migrations
-│   │   ├── models.py             # Booking and BookingSeat models
-│   │   ├── emails.py             # Booking-confirmation email helpers
-│   │   ├── signals.py            # Sends confirmations after commit
-│   │   ├── test_emails.py        # Email-flow tests
-│   │   └── templates/bookings/email/
-│   │       ├── booking_confirmation.html
-│   │       └── booking_confirmation.txt
-│   └── users/
-│       ├── migrations/
-│       ├── models.py
-│       ├── views.py
-│       └── admin.py
+│   ├── config/                   # Settings and project URL routes
+│   ├── events/                   # Events and seats
+│   ├── bookings/                 # Booking, cancellation, and email logic
+│   └── users/                    # User application
 ├── Frontend/
-│   ├── templates/
-│   │   ├── base.html
-│   │   ├── home.html
-│   │   └── event_detail.html
-│   └── static/
-│       └── style.css
-├── .gitignore
+│   ├── templates/                # HTML templates
+│   └── static/                   # CSS, JavaScript, and images
 ├── LICENSE
 └── README.md
 ```
 
-`Backend/.env` and `Backend/db.sqlite3` are local files. They are not part of the setup tree and should not be committed.
+`Backend/.env` and `Backend/db.sqlite3` are local files and should not be committed.
 
 ## Setup
 
-The commands below start from the repository root. After the database step, run Django management commands from `Backend/`.
-
-### Prerequisites
-
-- Python 3.12 or newer
-- Git
-- PowerShell on Windows, or a POSIX-compatible shell on macOS/Linux
+Run the following from the repository root.
 
 ### 1. Clone the repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/ShreyanshFS/Ticket-Booking-System.git
 cd Ticket-Booking-System
 ```
 
@@ -102,14 +66,14 @@ python3.12 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 3. Install backend dependencies
+### 3. Install dependencies
 
 ```bash
 python -m pip install --upgrade pip
 python -m pip install -r Backend/requirements.txt
 ```
 
-### 4. Create the local environment file
+### 4. Configure local environment variables
 
 Windows PowerShell:
 
@@ -123,62 +87,43 @@ macOS/Linux:
 cp Backend/.env.example Backend/.env
 ```
 
-Edit `Backend/.env` before enabling email delivery. The project loads this file automatically from the `Backend/` directory.
+Email delivery is optional in local development. Leave `EMAIL_HOST` empty to use Django's console email backend, or add SMTP values to `Backend/.env`. Do not commit that file or real credentials.
 
-### 5. Create the database
-
-From the repository root, change into the directory containing `manage.py`, then apply the existing migrations:
+### 5. Migrate and run
 
 ```bash
 cd Backend
 python manage.py migrate
-```
-
-The local SQLite database starts empty. No event seed data is included, so event records must be added before the home page can display event cards.
-
-### 6. Start the development server
-
-```bash
 python manage.py runserver
 ```
 
 Open <http://127.0.0.1:8000/> in a browser.
 
-## Email configuration
-
-Email delivery is optional during local development.
-
-- Leave `EMAIL_HOST` empty to use Django's console email backend. Messages are printed in the server terminal.
-- Set `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_HOST_USER`, `EMAIL_HOST_PASSWORD`, and the TLS/SSL options to use an SMTP provider.
-- For Gmail, use an app password rather than your regular account password.
-- Set `DEFAULT_FROM_EMAIL` to an address accepted by the SMTP provider.
-
-Example values are documented in `Backend/.env.example`. Never commit `Backend/.env` or place real credentials in documentation.
-
 ## Tests and checks
 
-Run these commands from `Backend/` while the virtual environment is active:
+Run these from `Backend/` while the virtual environment is active:
 
 ```bash
 python manage.py check
 python manage.py test
+python manage.py test bookings
 ```
 
-The email tests use Django's in-memory test mailbox; they do not send messages to real recipients.
+The email tests use Django's in-memory test mailbox and never send real messages.
 
 ## Routes
 
 | Route | Description |
 | --- | --- |
 | `/` | Active event listing |
-| `/events/<event_id>/` | Event details |
-| `/admin/` | Django admin site, including booking and event management |
-
-The `/admin/` route is connected in `Backend/config/urls.py`. Booking models are available through the admin, but there is not yet a public booking route.
+| `/events/<event_id>/` | Event details and seat booking |
+| `/book/<event_id>/` | Create a booking (POST) |
+| `/cancel/<booking_id>/` | Cancel the signed-in user's booking (POST) |
+| `/admin/` | Django admin |
 
 ## Contributing
 
-1. Create a feature branch: `git checkout -b feature/your-feature`
+1. Create a feature branch: `git checkout -b feature/your-feature`.
 2. Make and test your changes.
 3. Commit with a clear message.
 4. Push the branch and open a pull request.
@@ -186,8 +131,3 @@ The `/admin/` route is connected in `Backend/config/urls.py`. Booking models are
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-
-## Author
-
-SUNSTUTI SRIVASTAVA
-GitHub: [@sunstutisrivastava-bit](https://github.com/sunstutisrivastava-bit)
