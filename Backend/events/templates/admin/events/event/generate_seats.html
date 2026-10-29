@@ -1,0 +1,23 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_urls %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">Home</a>
+  &rsaquo; <a href="{% url 'admin:events_event_changelist' %}">Events</a>
+  &rsaquo; Generate seats
+</div>
+{% endblock %}
+
+{% block content %}
+<p>Create a seat grid for <strong>{{ event.title }}</strong>. Seats that already exist are kept as they are.</p>
+<form method="post">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="generate_seats">
+  <input type="hidden" name="apply" value="1">
+  <input type="hidden" name="{{ action_checkbox_name }}" value="{{ selected_pk }}">
+  {{ form.as_p }}
+  <input type="submit" class="default" value="Generate seats">
+  <a href="{% url 'admin:events_event_changelist' %}" class="button cancel-link">Cancel</a>
+</form>
+{% endblock %}
